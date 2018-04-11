@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdmoney.credit.applyinfo.domain.TmApplyMainInfoMapper">
+
+	<resultMap id="BaseResultMap" type="com.zdmoney.credit.applyinfo.domain.TmApplyMainInfo">
+		<result column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="APP_NO" property="appNo" jdbcType="VARCHAR" />
+		<result column="ID_NO" property="idNo" jdbcType="VARCHAR" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="APPLY_DATE" property="applyDate" jdbcType="TIMESTAMP" />
+		<result column="APPLY_ACCOUNT" property="applyAccount" jdbcType="DECIMAL" />
+		<result column="PRODUCT_CODE" property="productCode" jdbcType="DECIMAL" />
+		<result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR" />
+		<result column="APPLY_TERM" property="applyTerm" jdbcType="DECIMAL" />
+		<result column="STATE" property="state" jdbcType="VARCHAR" />
+		<result column="NEW_APP_NO" property="newAppNo" jdbcType="VARCHAR" />
+		<result column="HAS_CREDIT_REPORT" property="hasCreditReport" jdbcType="VARCHAR" />
+		<result column="IF_NEXT" property="ifNext" jdbcType="VARCHAR" />
+		<result column="PROMPT_MESSAGE" property="promptMessages" jdbcType="CLOB" />
+		<result column="PROMPT_ZX_MESSAGE" property="promptZXMessage" jdbcType="CLOB" />		
+		<result column="LAST_THREE_DAY" property="lastThreeDay" jdbcType="TIMESTAMP" />
+		<result column="LAST_DAY" property="lastDay" jdbcType="TIMESTAMP" />	
+		<result column="LAST_SUBMIT_TIME" property="lastSubmitTime" jdbcType="TIMESTAMP" />
+		<result column="IS_LAST_THREE_DAY" property="isLastThreeDay" jdbcType="VARCHAR" />
+		<result column="IS_MOVED" property="isMoved" jdbcType="VARCHAR" />	
+		<result column="MOVED_TIME" property="movedTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.zdmoney.credit.applyinfo.domain.TmApplyMainInfo">
+		insert into TM_APPLY_MAIN_INFO
+		<trim prefix="(" suffix=")">
+				ID,
+				USER_ID,
+				APP_NO,
+				ID_NO,
+				USER_NAME,
+				APPLY_DATE,
+				APPLY_ACCOUNT,
+				PRODUCT_CODE,
+				PRODUCT_NAME,
+				APPLY_TERM,
+				STATE,
+				NEW_APP_NO,
+				HAS_CREDIT_REPORT,
+				IF_NEXT,
+				PROMPT_MESSAGE,
+				PROMPT_ZX_MESSAGE,
+				LAST_THREE_DAY,
+				LAST_DAY,
+				LAST_SUBMIT_TIME
+		</trim>
+		<trim prefix="values (" suffix=")">
+				seq_TM_APPLY_MAIN_INFO.nextval,
+				#{userId,jdbcType=VARCHAR},
+				#{appNo,jdbcType=VARCHAR},
+				#{idNo,jdbcType=VARCHAR},
+				#{userName,jdbcType=VARCHAR},
+				#{applyDate,jdbcType=TIMESTAMP},
+				#{applyAccount,jdbcType=DECIMAL},
+				#{productCode,jdbcType=VARCHAR},
+				#{productName,jdbcType=VARCHAR},
+				#{applyTerm,jdbcType=DECIMAL},
+				#{state,jdbcType=VARCHAR},
+				#{newAppNo,jdbcType=VARCHAR},
+				#{hasCreditReport,jdbcType=VARCHAR},
+				#{ifNext,jdbcType=VARCHAR},
+				#{promptMessages,jdbcType=CLOB},
+				#{promptZXMessage,jdbcType=CLOB},
+				#{lastThreeDay,jdbcType=TIMESTAMP},
+				#{lastDay,jdbcType=TIMESTAMP},
+				#{lastSubmitTime,jdbcType=TIMESTAMP}
+		</trim>
+	</insert>
+
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from
+		TM_APPLY_MAIN_INFO
+		where ID = #{id,jdbcType=DECIMAL}
+	</delete>
+	
+	<!-- <delete id="deleteSysdate" parameterType="java.lang.Long">
+	
+		delete from tm_apply_field_info t where t.app_no in (
+        select a.app_no from tm_apply_main_info a where a.last_submit_time
+        <![CDATA[ < ]]> #{sysdate,jdbcType=TIMESTAMP});
+	</delete> -->
+	
+	
+	
+	
+
+	<select id="findListByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+			ID,USER_ID,APP_NO,ID_NO,USER_NAME,APPLY_DATE,APPLY_ACCOUNT,PRODUCT_CODE,PRODUCT_NAME,APPLY_TERM,STATE,NEW_APP_NO,
+			HAS_CREDIT_REPORT,IF_NEXT,PROMPT_MESSAGE,PROMPT_ZX_MESSAGE,LAST_THREE_DAY,LAST_DAY,LAST_SUBMIT_TIME,MOVED_TIME,IS_MOVED
+		FROM TM_APPLY_MAIN_INFO
+		WHERE 1=1
+			<if test="appNo != null">
+				AND APP_NO = #{appNo} 
+			</if>
+			<if test="idNo != null">
+				AND ID_NO = #{idNo}
+			</if>
+			<if test="USER_ID != null">
+				AND USER_ID = #{userId}
+			</if>
+			<if test="userName != null">
+				AND USER_NAME LIKE '%'||#{userName}||'%'  
+			</if>
+	</select>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.zdmoney.credit.applyinfo.domain.TmApplyMainInfo" >
+	    UPDATE TM_APPLY_MAIN_INFO
+	    <set >
+	      <if test="userId != null" >
+	        USER_ID = #{userId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="appNo != null" >
+	        APP_NO = #{appNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="idNo != null" >
+	        ID_NO = #{idNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="userName != null" >
+	        USER_NAME = #{userName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="applyDate != null" >
+	        APPLY_DATE = #{applyDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="applyAccount != null" >
+	        APPLY_ACCOUNT = #{applyAccount,jdbcType=DECIMAL},
+	      </if>
+	      <if test="productName != null" >
+	        PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="applyTerm != null" >
+	        APPLY_TERM = #{applyTerm,jdbcType=DECIMAL},
+	      </if>
+	      <if test="state != null" >
+	        STATE = #{state,jdbcType=VARCHAR},
+	      </if>
+	      <if test="newAppNo != null" >
+	        NEW_APP_NO = #{state,jdbcType=VARCHAR},
+	      </if>
+	      <if test="hasCreditReport != null" >
+	        HAS_CREDIT_REPORT = #{hasCreditReport,jdbcType=VARCHAR},
+	      </if>
+	      <if test="ifNext != null" >
+	        IF_NEXT = #{ifNext,jdbcType=VARCHAR},
+	      </if>
+	      <if test="promptMessages != null" >
+	        PROMPT_MESSAGE = #{promptMessages,jdbcType=CLOB},
+	      </if>
+	      <if test="promptZXMessage != null" >
+	        PROMPT_ZX_MESSAGE = #{promptZXMessage,jdbcType=CLOB},
+	      </if>		
+	       <if test="lastSubmitTime != null" >
+	        LAST_THREE_DAY = #{lastThreeDay,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="lastSubmitTime != null" >
+	        LAST_DAY = #{lastDay,jdbcType=TIMESTAMP},
+	      </if>
+	       <if test="lastSubmitTime != null" >
+	        LAST_SUBMIT_TIME = #{lastSubmitTime,jdbcType=TIMESTAMP},
+	      </if>
+	       <if test="isLastThreeDay != null" >
+	        IS_LAST_THREE_DAY = #{isLastThreeDay,jdbcType=VARCHAR}
+	      </if>
+	      <if test="isMoved != null" >
+	        IS_MOVED = #{isMoved,jdbcType=VARCHAR}
+	      </if> 
+	    </set>
+	    WHERE ID = #{id,jdbcType=DECIMAL}
+	  </update>
+	  
+	  <update id="updateMainTime" parameterType="com.zdmoney.credit.applyinfo.domain.TmApplyMainInfo" >
+	    UPDATE TM_APPLY_MAIN_INFO
+	    <set >
+	       <if test="lastSubmitTime != null" >
+	        LAST_THREE_DAY = #{lastThreeDay,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="lastSubmitTime != null" >
+	        LAST_DAY = #{lastDay,jdbcType=TIMESTAMP},
+	      </if>
+	       <if test="lastSubmitTime != null" >
+	        LAST_SUBMIT_TIME = #{lastSubmitTime,jdbcType=TIMESTAMP}
+	      </if>
+	    </set>
+	    WHERE ID = #{id,jdbcType=DECIMAL}
+	  </update>
+	  
+	  <select id="findWithByMap"  parameterType="java.util.Map" resultMap="BaseResultMap">
+
+		 SELECT 
+		 	B.*
+  		 FROM (
+  		 	SELECT A.*,ROWNUM RN FROM  (
+	  		 	SELECT * FROM tm_apply_main_info
+	  		 	WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+	  		 	  AND NEW_APP_NO IS NULL
+			 	  AND ( 
+			 	  <if test="user_name != '' and  id_no == '' "> 
+				 	  	USER_NAME like '%'||#{user_name}||'%' 
+				 	  </if>
+				 	  <if test="user_name == '' and  id_no != '' ">
+				 	  	ID_NO like '%'||#{id_no}
+				 	  </if> 
+				 	  <if test="user_name != '' and  id_no != '' ">
+				 	  	USER_NAME like '%'||#{user_name}||'%' or id_no like '%'||#{id_no}
+				 	  </if>
+				 	   <if test="user_name == '' and  id_no == '' ">
+				 	  	1=1
+				 	  </if> 
+			 	  ) 
+			 	  order by APPLY_DATE desc
+  		 	) A
+		 ) B WHERE B.RN <![CDATA[ > ]]> ${start} AND B.RN  <![CDATA[ <= ]]> ${end}
+		 
+	  </select>
+	  
+	  <select id="findWithByMap2" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+			ID,USER_ID,APP_NO,ID_NO,USER_NAME,APPLY_DATE,APPLY_ACCOUNT,PRODUCT_CODE,PRODUCT_NAME,APPLY_TERM,STATE,NEW_APP_NO,
+			HAS_CREDIT_REPORT,IF_NEXT,PROMPT_MESSAGE,PROMPT_ZX_MESSAGE,LAST_THREE_DAY,LAST_DAY,LAST_SUBMIT_TIME
+		FROM TM_APPLY_MAIN_INFO
+		WHERE 1=1
+		AND LENGTH(APP_NO) = 14
+			<if test="appNo != null and appNo != ''">
+				AND APP_NO != #{appNo} 
+			</if>
+			<if test="idNo != null">
+				AND ID_NO = #{idNo}
+			</if>
+	</select>
+	  
+	 <select id="findWithByMap3" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+			ID,USER_ID,APP_NO,ID_NO,USER_NAME,APPLY_DATE,APPLY_ACCOUNT,PRODUCT_CODE,PRODUCT_NAME,APPLY_TERM,STATE,NEW_APP_NO,
+			HAS_CREDIT_REPORT,IF_NEXT,PROMPT_MESSAGE,PROMPT_ZX_MESSAGE,LAST_THREE_DAY,LAST_DAY,LAST_SUBMIT_TIME 
+		FROM TM_APPLY_MAIN_INFO
+		WHERE 1=1
+			<if test="appNo != null and appNo != ''">
+				AND APP_NO = #{appNo} 
+			</if>
+			<if test="idNo != null and idNo != ''">
+				AND ID_NO = #{idNo}
+			</if>
+	</select>
+	
+	<select id="queryAPP1" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+			ID,USER_ID,APP_NO,ID_NO,USER_NAME,APPLY_DATE,APPLY_ACCOUNT,PRODUCT_CODE,PRODUCT_NAME,APPLY_TERM,STATE,NEW_APP_NO,
+			HAS_CREDIT_REPORT,IF_NEXT,PROMPT_MESSAGE,PROMPT_ZX_MESSAGE,LAST_THREE_DAY,LAST_DAY,LAST_SUBMIT_TIME 
+		FROM TM_APPLY_MAIN_INFO 
+		WHERE NEW_APP_NO IS NULL and ( LAST_THREE_DAY is null or LAST_DAY is null or LAST_SUBMIT_TIME is null )
+	</select>
+	
+	<select id="queryAPP2" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+			ID,USER_ID,APP_NO,ID_NO,USER_NAME,APPLY_DATE,APPLY_ACCOUNT,PRODUCT_CODE,PRODUCT_NAME,APPLY_TERM,STATE,NEW_APP_NO,
+			HAS_CREDIT_REPORT,IF_NEXT,PROMPT_MESSAGE,PROMPT_ZX_MESSAGE,LAST_THREE_DAY,LAST_DAY,LAST_SUBMIT_TIME 
+		FROM TM_APPLY_MAIN_INFO
+		WHERE USER_ID = #{userId,jdbcType=VARCHAR} AND NEW_APP_NO IS NULL
+		and LAST_THREE_DAY is not null and LAST_THREE_DAY <![CDATA[ < ]]> sysdate 
+	</select>
+	
+	<select id="queryAPP3" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+			ID,USER_ID,APP_NO,ID_NO,USER_NAME,APPLY_DATE,APPLY_ACCOUNT,PRODUCT_CODE,PRODUCT_NAME,APPLY_TERM,STATE,NEW_APP_NO,
+			HAS_CREDIT_REPORT,IF_NEXT,PROMPT_MESSAGE,PROMPT_ZX_MESSAGE,LAST_THREE_DAY,LAST_DAY,LAST_SUBMIT_TIME 
+		FROM TM_APPLY_MAIN_INFO
+		WHERE NEW_APP_NO IS NULL and LAST_SUBMIT_TIME is not null and LAST_SUBMIT_TIME <![CDATA[ < ]]> sysdate 
+	</select>
+	
+	<select id="count" parameterType="java.util.Map" resultType="java.lang.Integer">
+        
+        select count(*) from 
+          (
+        	SELECT * FROM tm_apply_main_info
+	  		 	WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+	  		 	  AND NEW_APP_NO IS NULL
+			 	  AND ( 
+			 	  <if test="user_name != '' and  id_no == '' "> 
+			 	  	USER_NAME like '%'||#{user_name}||'%' 
+			 	  </if>
+			 	  <if test="user_name == '' and  id_no != '' ">
+			 	  	ID_NO like '%'||#{id_no}
+			 	  </if> 
+			 	  <if test="user_name != '' and  id_no != '' ">
+			 	  	USER_NAME like '%'||#{user_name}||'%' or id_no like '%'||#{id_no}
+			 	  </if>
+			 	   <if test="user_name == '' and  id_no == '' ">
+			 	  	1=1
+			 	  </if> 
+          			)
+          	)
+    </select>
+      
+    <delete id="deleteByAppNo" parameterType="java.util.Map">
+		DELETE 
+			FROM
+		TM_APPLY_MAIN_INFO
+		WHERE  
+			APP_NO= #{appNo,jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="queryForPhotoMove"  parameterType="java.util.Map" resultMap="BaseResultMap" >
+		SELECT 
+		 	B.*
+  		 FROM (
+  		 	SELECT A.*,ROWNUM RN FROM  (
+	  		 	SELECT * FROM TM_APPLY_MAIN_INFO
+		  		 	WHERE  NEW_APP_NO IS NOT NULL
+			 	      <if test="userName != '' and  userName != null "> 
+				 	   AND USER_NAME like '%'||#{userName}||'%' 
+				 	  </if>
+				 	  <if test="idNo != '' and  idNo != null ">
+				 	   AND ID_NO like '%'||#{idNo}||'%' 
+				 	  </if> 
+				 	  <if test="appNo != '' and  appNo != null ">
+				 	   AND APP_NO like '%'||#{appNo}||'%' 
+				 	  </if>
+				 	   <if test="userId != '' and  userId != null ">
+				 	   AND USER_ID = #{userId,jdbcType=VARCHAR}
+				 	  </if>   
+			 	  ORDER BY APPLY_DATE DESC
+  		 	) A
+		 ) B WHERE B.RN <![CDATA[ > ]]> ${start} AND B.RN  <![CDATA[ <= ]]> ${end}
+	</select>
+	
+	<select id="countForPhotoMove" parameterType="java.util.Map" resultType="java.lang.Integer">
+        
+        SELECT COUNT(*) FROM 
+          (
+        	SELECT 
+        		* 
+        	FROM TM_APPLY_MAIN_INFO
+		  		 	WHERE  NEW_APP_NO IS NOT NULL
+			 	      <if test="userName != '' and  userName != null "> 
+				 	   AND USER_NAME like '%'||#{userName}||'%' 
+				 	  </if>
+				 	  <if test="idNo != '' and  idNo != null ">
+				 	   AND ID_NO like '%'||#{idNo}||'%' 
+				 	  </if> 
+				 	  <if test="appNo != '' and  appNo != null ">
+				 	   AND APP_NO like '%'||#{appNo}||'%' 
+				 	  </if>
+				 	   <if test="userId != '' and  userId != null ">
+				 	   AND USER_ID = #{userId,jdbcType=VARCHAR}
+				 	  </if>   
+			  ORDER BY APPLY_DATE DESC 
+          	)
+      </select>  
+	  
+	  <!-- 查询app未提交申请的订单 -->
+	  <select id="queryNotCommitApplyAppNo" parameterType="Map" resultMap="BaseResultMap">
+	  select * from (
+	  		SELECT ROWNUM RN,
+			ID,USER_ID,APP_NO,ID_NO,USER_NAME,APPLY_DATE,APPLY_ACCOUNT,PRODUCT_CODE,PRODUCT_NAME,APPLY_TERM,STATE,NEW_APP_NO,
+			HAS_CREDIT_REPORT,IF_NEXT,PROMPT_MESSAGE,PROMPT_ZX_MESSAGE,LAST_THREE_DAY,LAST_DAY,LAST_SUBMIT_TIME,IS_MOVED,MOVED_TIME
+			FROM TM_APPLY_MAIN_INFO 
+			where new_app_no is null
+			 <if test="status != '' and  status != null ">
+		 	   AND state = #{status,jdbcType=VARCHAR}
+		 	  </if> 
+		 	   <if test="isLastThreeDay != '' and  isLastThreeDay != null ">
+		 	   AND is_last_three_day = #{isLastThreeDay,jdbcType=VARCHAR}
+		 	  </if> 
+		 	   <if test="isMovedFalse != '' and  isMovedFalse != null ">
+		 	   <![CDATA[ AND (is_moved <> #{isMovedFalse,jdbcType=VARCHAR} or is_moved is null) ]]>
+		 	  </if> 
+		 	  <if test="isMoved != '' and  isMoved != null ">
+		 	   <![CDATA[ AND is_moved = #{isMoved,jdbcType=VARCHAR} ]]>
+		 	  </if> 
+		 	  <!-- 需要剔除的借款编号集合 -->
+				<if test="appNoEliminateList!=null and appNoEliminateList.size>0">
+					AND APP_NO NOT IN
+					<foreach collection="appNoEliminateList" item="appNoEliminateItem" open="(" close=")" separator=",">
+						#{appNoEliminateItem}
+					</foreach>
+				</if>
+				<!-- 新展业标识，借款编号为14位 -->
+			  <if test="appNoLength != null ">
+		 	   <![CDATA[ AND length(APP_NO) = #{appNoLength,jdbcType=VARCHAR} ]]>
+		 	  </if> 
+		 	   <if test="limitMax != '' ">
+		 	   <![CDATA[ AND ROWNUM <= #{limitMax} ]]>
+		 	  </if> 
+		 	  )
+ 		where 1=1 
+ 		 <if test="limitMin != '' ">
+	 	   <![CDATA[ AND RN >= #{limitMin} ]]>
+	 	  </if> 
+	  </select>
+	  <!-- 查询app未提交申请的订单 -->
+	  <select id="queryNotCommitApplyAppNoCount" parameterType="Map" resultType="int">
+	  		SELECT count(1)
+			FROM TM_APPLY_MAIN_INFO 
+			where new_app_no is null
+			 <if test="status != '' and  status != null ">
+		 	   AND state = #{status,jdbcType=VARCHAR}
+		 	  </if> 
+		 	   <if test="isLastThreeDay != '' and  isLastThreeDay != null ">
+		 	   AND is_last_three_day = #{isLastThreeDay,jdbcType=VARCHAR}
+		 	  </if> 
+		 	   <if test="isMovedFalse != '' and  isMovedFalse != null ">
+		 	   <![CDATA[ AND (is_moved <> #{isMovedFalse,jdbcType=VARCHAR} or is_moved is null) ]]>
+		 	  </if> 
+		 	  <if test="isMoved != '' and  isMoved != null ">
+		 	   <![CDATA[ AND is_moved = #{isMoved,jdbcType=VARCHAR} ]]>
+		 	  </if> 
+		 	  <if test="appNoLength != null ">
+		 	   <![CDATA[ AND length(APP_NO) = #{appNoLength,jdbcType=VARCHAR} ]]>
+		 	  </if> 
+	  </select>
+	
+    <!-- 认领申请-查询待提交申请件 -->	
+	<select id="getNoSubmitList" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select b.* from (select a.*, rownum rn from (
+			select * from tm_apply_main_info where user_id in
+			<foreach collection="employeeList" item="employee" open="(" close=")" separator=",">
+				#{employee.userCode,jdbcType=VARCHAR}
+			</foreach>
+                and new_app_no is null and is_moved is null
+              	order by last_three_day asc, apply_date desc) a) b
+		 where b.rn &gt; #{start} and b.rn &lt;= #{end}
+	</select>
+	
+	<!-- 认领申请-查询待提交申请件总数 -->	
+	<select id="getNoSubmitListCount" parameterType="java.util.List" resultType="int">
+		select count(1) from (select a.*, rownum rn from (
+			select * from tm_apply_main_info where user_id in
+				<foreach collection="list" item="employee" open="(" close=")" separator=",">
+				#{employee.userCode,jdbcType=VARCHAR}
+				</foreach>
+                and new_app_no is null and is_moved is null
+              	order by last_three_day asc, apply_date desc) a) b
+	</select>
+	
+	
+	<!-- 认领申请-认领待提交申请件 -->
+	<update id="claimNoSubmit" parameterType="java.util.Map">
+		update tm_apply_main_info set user_id=#{userCode},is_moved='Y', moved_time=sysdate where id=#{id}
+	</update>
+	
+	<!-- 查询自动超时取消的进件 -->
+	<select id="getTimeoutApp" resultMap="BaseResultMap">
+		select app_no from tm_apply_main_info where length(app_no) = 14 and last_submit_time &lt; sysdate
+	</select>
+</mapper>

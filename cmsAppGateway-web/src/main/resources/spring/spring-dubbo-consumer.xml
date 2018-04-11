@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+	<dubbo:application name="cmsAppGateway-web" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+
+	<!-- 关闭服务 -->
+	<dubbo:consumer check="${dubbo.consumer.check}" />
+	
+	<!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+	<dubbo:reference id="iAPPExecuter" interface=" com.ymkj.cms.biz.api.service.app.IAPPExecuter" check="false" retries="0" timeout="90000" />
+	<!-- 规则引擎 start-->
+	<dubbo:reference id="iRuleEngineExecuter" interface="com.ymkj.rule.biz.api.service.IRuleEngineExecuter" check="false" retries="0" timeout="50000" />
+  	<dubbo:reference id="iapplyValidateExecuter" interface="com.ymkj.cms.biz.api.service.apply.IApplyValidateExecuter" check="false" retries="0" timeout="90000" />
+	<!-- 规则引擎 end-->
+	<!--渠道 -->
+	<dubbo:reference id="iBMSChannelExecuter" interface="com.ymkj.cms.biz.api.service.master.IBMSChannelExecuter" check="false" retries="0" timeout="50000" />
+	
+	<dubbo:reference id="iBMSAppPersonInfoExecuter" interface="com.ymkj.cms.biz.api.service.master.IBMSAppPersonInfoExecuter" check="false" retries="0" timeout="50000" />
+	<dubbo:reference id="iBMSTmParameterExecuter" interface="com.ymkj.cms.biz.api.service.master.IBMSTmParameterExecuter" check="false" retries="0" timeout="50000" />
+	
+</beans>  

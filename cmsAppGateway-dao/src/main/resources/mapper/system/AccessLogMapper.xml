@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdmoney.credit.system.domain.AccessLogMapper">
+	<resultMap id="BaseResultMap" type="com.zdmoney.credit.system.domain.AccessLog">
+		<result column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="CALLER" property="caller" jdbcType="VARCHAR" />
+		<result column="PARAM_IN" property="paramIn" jdbcType="VARCHAR" />
+		<result column="PARAM_OUT" property="paramOut" jdbcType="VARCHAR" />
+		<result column="USED_TIME" property="usedTime" jdbcType="DECIMAL" />
+		<result column="REQ_TIME" property="reqTime" jdbcType="TIMESTAMP" />
+		<result column="RES_TIME" property="resTime" jdbcType="TIMESTAMP" />
+		<result column="EXT1" property="ext1" jdbcType="VARCHAR" />
+		<result column="EXT2" property="ext2" jdbcType="VARCHAR" />
+		<result column="EXT3" property="ext3" jdbcType="VARCHAR" />
+		<result column="EXT4" property="ext4" jdbcType="VARCHAR" />
+	</resultMap>
+	<insert id="insert" parameterType="com.zdmoney.credit.system.domain.AccessLog">
+		insert into ACCESS_LOG
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="funcNo != null">
+				FUNC_NO,
+			</if>
+			<if test="caller != null">
+				CALLER,
+			</if>
+			<if test="paramIn != null">
+				PARAM_IN,
+			</if>
+			<if test="paramOut != null">
+				PARAM_OUT,
+			</if>
+			<if test="usedTime != null">
+				USED_TIME,
+			</if>
+			<if test="reqTime != null">
+				REQ_TIME,
+			</if>
+			<if test="resTime != null">
+				RES_TIME,
+			</if>
+			<if test="ext1 != null">
+				EXT1,
+			</if>
+			<if test="ext2 != null">
+				EXT2,
+			</if>
+			<if test="ext3 != null">
+				EXT3,
+			</if>
+			<if test="ext4 != null">
+				EXT4,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=DECIMAL},
+			</if>
+			<if test="funcNo != null">
+				#{funcNo,jdbcType=VARCHAR},
+			</if>
+			<if test="caller != null">
+				#{caller,jdbcType=VARCHAR},
+			</if>
+			<if test="paramIn != null">
+				#{paramIn,jdbcType=CLOB},
+			</if>
+			<if test="paramOut != null">
+				#{paramOut,jdbcType=CLOB},
+			</if>
+			<if test="usedTime != null">
+				#{usedTime,jdbcType=DECIMAL},
+			</if>
+			<if test="reqTime != null">
+				#{reqTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="resTime != null">
+				#{resTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ext1 != null">
+				#{ext1,jdbcType=VARCHAR},
+			</if>
+			<if test="ext2 != null">
+				#{ext2,jdbcType=VARCHAR},
+			</if>
+			<if test="ext3 != null">
+				#{ext3,jdbcType=VARCHAR},
+			</if>
+			<if test="ext4 != null">
+				#{ext4,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+</mapper>

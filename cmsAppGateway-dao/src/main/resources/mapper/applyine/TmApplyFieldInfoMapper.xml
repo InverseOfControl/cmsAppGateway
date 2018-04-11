@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdmoney.credit.applyinfo.domain.TmApplyFieldInfoMapper">
+
+	<resultMap id="BaseResultMap" type="com.zdmoney.credit.applyinfo.domain.TmApplyFieldInfo">
+		
+		<result column="ID" property="id" jdbcType="DECIMAL" />
+		<result column="APP_NO" property="appNo" jdbcType="VARCHAR" />
+		<result column="FIELD_KEY" property="fieldKey" jdbcType="VARCHAR" />
+		<result column="FIELD_OBJ_VALUE" property="fieldObjValue" jdbcType="CLOB" />
+		<result column="FIELD_ARR_VALUE" property="fieldArrValue" jdbcType="CLOB" />
+		<result column="FIELD_TYPE" property="fieldType" jdbcType="VARCHAR" />
+		<result column="STATE" property="state" jdbcType="VARCHAR" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="UPDATE_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.zdmoney.credit.applyinfo.domain.TmApplyFieldInfo">
+		insert into tm_apply_field_info
+		<trim prefix="(" suffix=")">
+				ID,
+				APP_NO,
+				FIELD_KEY,
+				FIELD_OBJ_VALUE,
+				FIELD_ARR_VALUE,
+				FIELD_TYPE,
+				STATE,
+				CREATE_DATE,
+				UPDATE_DATE
+		</trim>
+		<trim prefix="values (" suffix=")">
+				seq_tm_apply_field_info.nextval,
+				#{appNo,jdbcType=VARCHAR},
+				#{fieldKey,jdbcType=VARCHAR},
+				#{fieldObjValue,jdbcType=CLOB},
+				#{fieldArrValue,jdbcType=CLOB},
+				#{fieldType,jdbcType=VARCHAR},
+				#{state,jdbcType=VARCHAR},
+				sysdate,
+				#{updateDate,jdbcType=TIMESTAMP}
+		</trim>
+	</insert>
+
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from
+		tm_apply_field_info
+		where ID = #{id,jdbcType=DECIMAL}
+	</delete>
+	
+
+
+	<select id="findListByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT 
+			ID,APP_NO,FIELD_KEY,FIELD_OBJ_VALUE,FIELD_ARR_VALUE,FIELD_TYPE,STATE,CREATE_DATE,UPDATE_DATE 
+		FROM TM_APPLY_FIELD_INFO
+		where 1=1
+			<if test="appNo != null">
+				AND APP_NO = #{appNo}
+			</if>
+			<if test="fieldKey != null">
+				AND FIELD_KEY = #{fieldKey}
+			</if>
+			<if test="state != null">
+				AND STATE = #{state}
+			</if>
+	</select>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.zdmoney.credit.applyinfo.domain.TmApplyFieldInfo" >
+	    UPDATE TM_APPLY_FIELD_INFO
+	    <set >
+	      <if test="appNo != null" >
+	        APP_NO = #{appNo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="fieldKey != null" >
+	        FIELD_KEY = #{fieldKey,jdbcType=VARCHAR},
+	      </if>
+	      <if test="fieldObjValue != null" >
+	        FIELD_OBJ_VALUE = #{fieldObjValue,jdbcType=CLOB},
+	      </if>
+	      <if test="fieldArrValue != null" >
+	        FIELD_ARR_VALUE = #{fieldArrValue,jdbcType=CLOB},
+	      </if>
+	      <if test="fieldType != null" >
+	        FIELD_TYPE = #{fieldType,jdbcType=CLOB},
+	      </if>
+	      <if test="state != null" >
+	        STATE = #{state,jdbcType=VARCHAR},
+	      </if>
+	      <if test="createDate != null" >
+	        CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="updateDate != null" >
+	        UPDATE_DATE = #{updateDate,jdbcType=TIMESTAMP}
+	      </if>
+	    </set>
+	    WHERE ID = #{id,jdbcType=DECIMAL}
+	  </update>
+	  
+	  <update id="updateAppNo" parameterType="java.util.Map" >
+	    UPDATE TM_APPLY_FIELD_INFO
+	    set  APP_NO = #{appNo,jdbcType=VARCHAR}
+	    WHERE APP_NO = #{oldAppNo,jdbcType=VARCHAR}
+	  </update>
+	  
+	  <delete id="deleteByAppNo" parameterType="java.util.Map">
+		DELETE 
+			FROM
+		TM_APPLY_FIELD_INFO
+		WHERE  
+			APP_NO= #{appNo,jdbcType=VARCHAR}
+	 </delete>
+	 
+	 <delete id="deleteByCon" parameterType="java.util.Map">
+		delete from
+		TM_APPLY_FIELD_INFO
+		where 1=1
+		<if test="appNo != null and appNo !=''" >
+	        and APP_NO= #{appNo,jdbcType=VARCHAR}
+	    </if>
+	    <if test="fieldKey != null and fieldKey !=''" >
+	        and FIELD_KEY= #{fieldKey,jdbcType=VARCHAR}
+	    </if>
+	</delete>
+	
+		<!-- 查询未提交申请客户 -->
+	<select id="queryCusInfo" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT TMA.id as id,TMP.APP_NO as appNo,TMP.USER_NAME as userName,TMA.FIELD_OBJ_VALUE as personInfo FROM tm_apply_main_info TMP INNER JOIN TM_APPLY_FIELD_INFO TMA ON TMP.APP_NO=TMA.APP_NO WHERE  TMP.NEW_APP_NO IS NULL AND TMP.USER_ID=#{userId} AND TMA.FIELD_KEY='persionInfo'
+		 <if test="userName != '' and  userName != null ">
+		 	   AND TMP.USER_NAME = #{userName}
+		 </if>
+		 ORDER BY LAST_THREE_DAY ASC,APPLY_DATE DESC
+	</select>
+	
+	<!-- 更新客户详单信息 -->
+	<update id="upObjInfoById" parameterType="java.util.HashMap">
+	  update TM_APPLY_FIELD_INFO set FIELD_OBJ_VALUE=#{fieldObjValue} where id=#{id}
+	</update>
+	
+	<select id="selectObjInfoById" parameterType="java.util.HashMap">
+	  select FIELD_OBJ_VALUE as personinfo from  TM_APPLY_FIELD_INFO  where FIELD_KEY='persionInfo' and id=#{id}
+	</select>
+	
+	<!-- 同步联系人信息和配偶信息 -->
+	<update id="syncContactPersonInfo" parameterType="com.zdmoney.credit.applyinfo.domain.TmApplyFieldInfo">
+	  update TM_APPLY_FIELD_INFO set state=#{state} where app_no=#{appNo} and field_key=#{fieldKey}
+	</update>
+	
+</mapper>

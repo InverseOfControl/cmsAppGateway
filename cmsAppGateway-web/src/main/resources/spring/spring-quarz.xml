@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd">
+
+	<task:annotation-driven />
+	
+	<!-- 针对app未提交申请的申请件推送益百利定时任务 -->
+	<bean id="appNotCommitApplyTask" class="com.zdmoney.credit.framework.quartz.APPNotCommitApplyTask"></bean>
+	<task:scheduled-tasks>
+		<task:scheduled ref="appNotCommitApplyTask" method="execute" cron="${sys.APPNotCommitApply}" />
+	</task:scheduled-tasks>
+	
+	<!-- 处于APP，未提交到录入修改队列的借款定时推送益百利  -->
+	<bean id="appNotCommitModifyTask" class="com.zdmoney.credit.framework.quartz.APPNotCommitModifyTask"></bean>
+	<task:scheduled-tasks>
+		<task:scheduled ref="appNotCommitModifyTask" method="execute" cron="${sys.APPNotCommitModify}" />
+	</task:scheduled-tasks>
+	
+	<!-- APP环节发生客服认领的申请且未提交至录入修改队列的申请，日终跑批推送益百利做拒绝处理  -->
+	<bean id="appNotCommitClaimTask" class="com.zdmoney.credit.framework.quartz.APPNotCommitClaimTask"></bean>
+	<task:scheduled-tasks>
+		<task:scheduled ref="appNotCommitClaimTask" method="execute" cron="${sys.APPNotCommitClaim}" />
+	</task:scheduled-tasks>
+	
+	<!-- APP环节发生客服认领的申请且未提交至录入修改队列的申请，日终跑批推送益百利做拒绝处理  -->
+	<bean id="autoCancelDispatcher" class="com.zdmoney.credit.framework.quartz.AutoCancelDispatcher"></bean>
+	<task:scheduled-tasks>
+		<task:scheduled ref="autoCancelDispatcher" method="execute" cron="${sys.autoCancelDispatchCron}" />
+	</task:scheduled-tasks>
+</beans>  
